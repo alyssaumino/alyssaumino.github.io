@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    background-color: white;
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  kbd {
+    color: #121212;
+  }
+</style>
+<title>CS 184 Path Tracer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2024</h1>
+<h1 align="middle">Milestone Status Report Webpage</h1>
+<h2 align="middle">Leo Huang, Larissa Tsai, Veena Ummadisetty, and Alyssa Umino</h2>
+
+<!-- Add Website URL -->
+<h2 align="middle">Website URL: <a href="https://alyssaumino.github.io/">https://alyssaumino.github.io/</a></h2>
+
+<br>
+
+<div>
+
+    <h2 align="middle">Overview: Spatial Keyframing a Bear</h2>
+    <p>
+        We plan to implement a basic version of spatial keyframing, which defines key poses in 3D space for a given character. We will be reading and implementing methods introduced in Takeo Igarashi, Tomer Moscovich, and John F. Hughes’s paper. We hope to be able to animate various simple movements in 3D characters, and ideally a dancing bear as well. 
+    </p>
+    <p>
+        Temporal keyframing is the traditional approach to generating animation of characters. However, it can be tedious and time-consuming, and often difficult for novice users to generate smooth, lively animation. Spatial keyframing allows for keyframes to be defined in the character’s world, and the animation is recorded based on the user’s control of the character, where keyframes can be interpolated between. It’s important because it allows for the animation of imaginary characters that may not have motion-capture data to go off of, and is also more intuitive to animate. It’s difficult, however, to “control complicated motions of a character in real time”, which is why spatial keyframes are necessary to have, so that the user input between keyframes can reduce the degrees of freedom of the animating character. For the most part, our solution lies within the paper and the methods introduced.
+    </p>
+    <br />
+
+    <h2 align="middle">Summary of Accomplishments</h2>
+
+    <p>
+        We have read the original paper and successfully completed the development of the initial software setup which included a mesh viewer implementation of Squirrel from the paper. This setup is designed to take in a list of 3D vertices and render various objects. We also successfully unpacked the paper’s demo data from the official project page and verified the visualization was successful. Additionally, we have implemented skeleton versions of algorithms introduced in Section 4 of the paper. As a note, our orthonormalization implementation is a bit different from Gram Schmidt which was interesting, which was aimed to preserve the matrix similarity. However, the implementation of interpolation was blocked by understanding where/what markers are coming from, which is important for determining the size of the matrix.     </p>
+    <br />
+
+    <h2 align="middle">Preliminary Results</h2>
+    <p>
+        As previously mentioned, we worked on a custom viewer application. Our Squirrel viewer application allows us to load .obj files and manipulate the rendered object using our mouse. However, the creation of new keyframes has not been tested at this time and we also have not supported texture display. Future testing will need to be done on the creation of new keyframes and how they can be integrated with the current setup and algorithm implementations. We ran into some difficulties in manipulating the rendered object using code and had to read through the rendered file source code for this. For example, the distinction between the markers and vertices adds an additional layer of flexibility in how the model is manipulated and interpolated and the correct one must be chosen. 
+    </p>
+    <p>
+        We worked on understanding and trying to implement a skeleton/pseudocode version of the math provided in the paper as well. Since we didn’t have the model at the time, it was difficult to translate the object into vector points we could use for our code. We initially turned to C++ first, as it felt the most familiar, from previous projects. In a temporary file, we mapped out the data structures and general logic, coding some parts up, though it was hard to finalize. After meeting up, we’ve decided to pivot to Python and translate a lot of our code, while actually filling in the implementations. The process should be smoother now that we can visualize and test with the rendered object as well. 
+    </p>
+
+    <h3>
+        Screenshots of our implementation of Squirrel, the 3D modeling environment.
+    </h3>
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="center">
+                <td>
+                    <img src="images/terminal.PNG" align="middle" width="400px" />
+                    <figcaption>Running the script</figcaption>
+                </td>
+                <td>
+                    <img src="images/blank_window.PNG" align="middle" width="400px" />
+                    <figcaption>Initial empty window</figcaption>
+                </td>
+            </tr>
+            <tr align="center">
+                <td>
+                    <img src="images/select_obj.PNG" align="middle" width="400px" />
+                    <figcaption>Selecting a .obj file to open</figcaption>
+                </td>
+                <td>
+                    <img src="images/loaded_obj.PNG" align="middle" width="400px" />
+                    <figcaption>Loaded .obj file (teddy.obj)</figcaption>
+                </td>
+            </tr>
+            <tr align="center">
+                <td>
+                    <img src="images/moved_obj.PNG" align="middle" width="400px" />
+                    <figcaption>The 3D model can also be rotated/moved</figcaption>
+                </td>
+                <td>
+                    <img src="images/squirrel.PNG" align="middle" width="400px" />
+                    <figcaption>Example of another .obj file (squirrel.obj)</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <h3>
+        Screenshot of our implementation of the transforms in the paper.
+    </h3>
+    <div align="middle">
+        <table style="width:100%">
+            <tr align="center">
+                <td>
+                    <img src="images/python_code.png" align="middle" width="400px" />
+                    <figcaption>Python code of implementation</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <h2 align="middle">Progress Relative to Plan</h2>
+    <p>
+        Igarashi’s SmoothTeddy didn’t end up being a viable method for a 3D modeling environment (the code is very old, 2003, and doesn’t work on our current computers) so we are a little behind schedule from our original timeline, since it took us time to implement our own 3D modeling environment. As a result, we didn’t get to the task of implementing simple animations from the reference paper (2-3 frames). This part will instead be done in the subsequent week of our plan instead.    
+        Miscommunication on which language we’re using also prevented us from easily merging our work. We will be converting to Python for the time being for easier integration of the algorithm implementation into our existing SquirrelViewer, and using NumPy for our vector math. Once integrated, we will try to have more simple animations created before we move on the complex movement animations, as we are a little behind on schedule. 
+    </p>
+    <p>
+        Miscommunication on which language we’re using prevented us from easily merging our work. We converted to Python for the time being for easier integration of the algorithm implementation into our existing SquirrelViewer, and using NumPy for our vector math. Once integrated, we will try to have more simple animations created before we move on the complex movement animations, as we are a little behind on schedule.
+    </p>
+    <h3 align="middle">Updated work plan</h3>
+    <p>
+        We are shifting a week back. We think that once we can finalize the code for a basic animation using keyframes, like we were expecting to do for midterm deliverable, it’ll be much easier to implement the final dance. However, getting this system down is more difficult than we expected. Our new plan for Week 3 is completing the implementation for the interpolation in Python, taking into account the bear model input. In Week 4, we hope to see the basic animation of the bear using the final product and create the Haidilao dance in the latter half of the week. We will split the separate sections of the dance, so that we can all practice using the final product. 
+    </p>
+    <br />
+
+    <h2 align="middle">Milestone Video</h2>
+    <h3>
+        Link to video summarizing our progress, including general idea and demo.
+    </h3>
+    <p>
+        <a href="https://drive.google.com/file/d/1K0iLQOmBGNlHB0cp-FMS0xtFaYxHNrBU/view?usp=drive_link">
+            https://drive.google.com/file/d/1K0iLQOmBGNlHB0cp-FMS0xtFaYxHNrBU/view?usp=drive_link
+        </a>    
+    </p>
+
+    <h2 align="middle">Presentation Slides</h2>
+    <h3>
+        Link to slides summarizing our project and current progress. 
+    </h3>
+    <p>
+        <a href="https://docs.google.com/presentation/d/1Gc6SkudSP1zv_cuda0rs72bCgOoIHxXGcLsTS40EnJY/edit?fbclid=IwAR2KOImwq606KCsicicMaTOIrYF2JMD7K-sTB6Qr9BObg90R9OR-AJCdTEk#slide=id.ged3401ed36_1_0">
+            https://docs.google.com/presentation/d/1Gc6SkudSP1zv_cuda0rs72bCgOoIHxXGcLsTS40EnJY/edit?fbclid=IwAR2KOImwq606KCsicicMaTOIrYF2JMD7K-sTB6Qr9BObg90R9OR-AJCdTEk#slide=id.ged3401ed36_1_0
+        </a>
+    </p>
+
+</div></body>
+</html>
